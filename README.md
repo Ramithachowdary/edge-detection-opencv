@@ -34,112 +34,58 @@ Find the edges in ramitha.png with Sobel, Prewitt, Roberts, Laplacian and Canny.
 
 ## Program
 
-#### 1. Blur the grayscale photo
+#### 1.
 
 ```python
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
-bgr = cv2.imread("ramitha.png")
-gray = cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY)
-soft = cv2.GaussianBlur(gray, (3, 3), 0)
-plt.imshow(soft, cmap="gray")
-plt.title("Blurred grayscale")
-plt.axis("off")
-plt.show()
+image = cv2.imread('ramitha.png')
+gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+plt.title('Original Image')
+plt.axis('off')
 ```
 
-#### 2. Sobel edges
+#### 2.
 
 ```python
-sobel_x = cv2.convertScaleAbs(cv2.Sobel(soft, cv2.CV_64F, 1, 0, ksize=3))
-sobel_y = cv2.convertScaleAbs(cv2.Sobel(soft, cv2.CV_64F, 0, 1, ksize=3))
-plt.figure(figsize=(8, 4))
-plt.subplot(1, 2, 1)
-plt.imshow(sobel_x, cmap="gray")
-plt.title("Sobel x")
-plt.axis("off")
-plt.subplot(1, 2, 2)
-plt.imshow(sobel_y, cmap="gray")
-plt.title("Sobel y")
-plt.axis("off")
-plt.show()
+sobel_x = cv2.Sobel(gray_image, cv2.CV_64F, 1, 0, ksize=5)
+sobel_y = cv2.Sobel(gray_image, cv2.CV_64F, 0, 1, ksize=5)
+sobel_combined = cv2.magnitude(sobel_x, sobel_y)
+plt.imshow(sobel_combined, cmap='gray')
+plt.title('Sobel Edge Detection')
+plt.axis('off')
 ```
 
-#### 3. Prewitt edges
+#### 3.
 
 ```python
-prewitt_x = np.array([[-1, 0, 1], [-1, 0, 1], [-1, 0, 1]], np.float32)
-prewitt_y = np.array([[-1, -1, -1], [0, 0, 0], [1, 1, 1]], np.float32)
-gx = cv2.filter2D(soft, cv2.CV_32F, prewitt_x)
-gy = cv2.filter2D(soft, cv2.CV_32F, prewitt_y)
-prewitt = cv2.convertScaleAbs(cv2.magnitude(gx, gy))
-plt.imshow(prewitt, cmap="gray")
-plt.title("Prewitt")
-plt.axis("off")
-plt.show()
+laplacian = cv2.Laplacian(gray_image, cv2.CV_64F)
+plt.imshow(laplacian, cmap='gray')
+plt.title('Laplacian Edge Detection')
+plt.axis('off')
 ```
 
-#### 4. Roberts edges
+#### 4.
 
 ```python
-roberts_x = np.array([[1, 0], [0, -1]], np.float32)
-roberts_y = np.array([[0, 1], [-1, 0]], np.float32)
-gx = cv2.filter2D(soft, cv2.CV_32F, roberts_x)
-gy = cv2.filter2D(soft, cv2.CV_32F, roberts_y)
-roberts = cv2.convertScaleAbs(cv2.magnitude(gx, gy))
-plt.imshow(roberts, cmap="gray")
-plt.title("Roberts")
-plt.axis("off")
-plt.show()
-```
-
-#### 5. Laplacian edges
-
-```python
-lap = cv2.convertScaleAbs(cv2.Laplacian(soft, cv2.CV_64F))
-plt.imshow(lap, cmap="gray")
-plt.title("Laplacian")
-plt.axis("off")
-plt.show()
-```
-
-#### 6. Canny edges
-
-```python
-edges = cv2.Canny(soft, 80, 160)
-plt.imshow(edges, cmap="gray")
-plt.title("Canny")
-plt.axis("off")
-plt.show()
+canny_edges = cv2.Canny(gray_image, 50, 150)
+plt.imshow(canny_edges, cmap='gray')
+plt.title('Canny Edge Detection')
+plt.axis('off')
 ```
 
 ## Output
 
-### i) Blurred grayscale
+<img width="389" height="410" alt="Original Image" src="output/01-original.png" />
 
-<img width="389" height="410" alt="Blurred grayscale" src="output/01-blurred.png" />
+<img width="389" height="410" alt="Sobel Edge Detection" src="output/02-sobel.png" />
 
-### ii) Sobel
+<img width="389" height="410" alt="Laplacian Edge Detection" src="output/03-laplacian.png" />
 
-<img width="639" height="323" alt="Sobel" src="output/02-sobel.png" />
-
-### iii) Prewitt
-
-<img width="389" height="410" alt="Prewitt" src="output/03-prewitt.png" />
-
-### iv) Roberts
-
-<img width="389" height="410" alt="Roberts" src="output/04-roberts.png" />
-
-### v) Laplacian
-
-<img width="389" height="410" alt="Laplacian" src="output/05-laplacian.png" />
-
-### vi) Canny
-
-<img width="389" height="410" alt="Canny" src="output/06-canny.png" />
+<img width="389" height="410" alt="Canny Edge Detection" src="output/04-canny.png" />
 
 ## Result
 
